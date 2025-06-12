@@ -1,5 +1,5 @@
 # Use a base image with Python 3.10 and CUDA 11.8 support
-FROM runpod/pytorch:2.2.2-py3.10-cuda11.8.0-devel-ubuntu22.04
+FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
