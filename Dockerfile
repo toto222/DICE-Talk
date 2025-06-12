@@ -15,7 +15,7 @@ WORKDIR /app
 COPY . .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip &&     pip install --no-cache-dir torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu118 &&     pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip &&     pip install --no-cache-dir torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu118 &&     pip install --no-cache-dir -r requirements.txt &&     pip install --no-cache-dir runpod requests
 
 # Download pre-trained models
 RUN python3 -m pip install "huggingface_hub[cli]" &&     huggingface-cli download EEEELY/DICE-Talk --local-dir checkpoints --exclude "*/.git*" "*/.gitattributes" &&     huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --local-dir checkpoints/stable-video-diffusion-img2vid-xt --exclude "*/.git*" "*/.gitattributes" &&     huggingface-cli download openai/whisper-tiny --local-dir checkpoints/whisper-tiny --exclude "*/.git*" "*/.gitattributes"
