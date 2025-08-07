@@ -12,6 +12,7 @@ Disentangle Identity, Cooperate Emotion: Correlation-Aware Emotional Talking Por
 
 
 ## 🔥🔥🔥 NEWS
+**`2025/08/01`**: Our DICE-Talk is accepted by ACM MM'25!
 
 **`2025/04/29`**: We released the initial version of the inference code and models. Stay tuned for continuous updates!
 
