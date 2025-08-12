@@ -128,3 +128,45 @@ If you find our work helpful for your research, please consider citing our work.
   year={2024}
 }
 ```
+
+## 🚀 Deploying on RunPod Serverless
+
+This project can be deployed as a serverless endpoint on RunPod. Here's how:
+
+1.  **Ensure you have a RunPod account.**
+2.  **Create a Serverless Endpoint:**
+    *   Go to `Serverless -> My Endpoints` and click `+ New Endpoint`.
+    *   Configure the endpoint:
+        *   **Name:** Choose a name (e.g., "dice-talk").
+        *   **Select Template:** You might start with a blank template or a generic Python one if you don't have a custom template yet.
+        *   **Container Image:** You will build a Docker image from the `Dockerfile` in this repository and push it to a container registry (like Docker Hub, GCP Artifact Registry, AWS ECR). Then, provide the image URI here.
+        *   **GPU Configuration:** Select a GPU type with at least 20GB VRAM (e.g., RTX 3090, A100).
+        *   **Min/Max Workers:** Configure as needed.
+        *   **Idle Timeout:** Set an appropriate idle timeout.
+        *   **Container Disk:** Ensure it's large enough for the models and dependencies (e.g., 25-30 GB might be a safe start, adjust as needed).
+3.  **Build and Push Docker Image:**
+    *   Clone this repository.
+    *   Build the Docker image: `docker build -t your-registry/dice-talk:latest .`
+    *   Push the image to your container registry: `docker push your-registry/dice-talk:latest`
+    *   *(Replace `your-registry` with your actual container registry path)*
+4.  **Handler:** The entry point for RunPod is `runpod_handler.py`. The `Dockerfile` is already configured to use this.
+5.  **Making Requests:**
+    *   Once the endpoint is active, you can send requests to its API URL.
+    *   The input should be a JSON payload like this:
+
+    ```json
+    {
+        "input": {
+            "image_url": "URL_TO_YOUR_IMAGE.png",
+            "audio_url": "URL_TO_YOUR_AUDIO.wav",
+            "emotion": "happy", // Optional: e.g., "neutral", "happy", "angry", "surprised", "sad", "disgusted", "fear", "contempt" (defaults to "neutral")
+            "ref_scale": 3.0,     // Optional: Identity preservation strength (default: 3.0)
+            "emo_scale": 6.0,     // Optional: Emotion generation strength (default: 6.0)
+            "crop": false,        // Optional: Whether to crop the input image (default: false)
+            "seed": null          // Optional: Random seed for generation (default: None)
+        }
+    }
+    ```
+    *   The response will be a JSON containing either an `output_video_path` (if using direct output from RunPod) or an error message. For production, you'd typically modify `runpod_handler.py` to upload the video to a cloud storage (like S3) and return a presigned URL.
+
+**Note on Model Downloads:** The `Dockerfile` handles downloading all necessary pre-trained models during the image build process. This means the models will be included in your Docker image.
